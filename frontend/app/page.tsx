@@ -11,6 +11,9 @@ import {
   RefreshCw, CreditCard 
 } from 'lucide-react';
 
+// --- CONFIGURATION ---
+const API_BASE_URL = "https://dream-uni-backend.onrender.com";
+
 // --- TYPES ---
 interface University {
   id: number;
@@ -57,20 +60,19 @@ interface Task {
     aiAction?: string; 
 }
 
-// --- LOGIC ENGINE (Updated: Smart & Dynamic) ---
+// --- LOGIC ENGINE ---
 const generateCountryAnalysis = (profile: UserProfile) => {
-    // Base Data
     let countries = [
         { name: "Canada", match: 60, reason: "Immigration friendly & moderate tuition.", type: "Medium Match" },
         { name: "Germany", match: 65, reason: "Low tuition fees, high technical standards.", type: "Medium Match" },
         { name: "USA", match: 55, reason: "Top tier education but high cost.", type: "Medium Match" },
         { name: "UK", match: 60, reason: "1-year Masters is time efficient.", type: "Medium Match" },
         { name: "Australia", match: 65, reason: "High quality of life & post-study work.", type: "Medium Match" },
-        { name: "India", match: 50, reason: "Home advantage & low cost.", type: "Low Match" }, // Base score
+        { name: "India", match: 50, reason: "Home advantage & low cost.", type: "Low Match" },
         { name: "Ireland", match: 60, reason: "Growing tech hub in Europe.", type: "Medium Match" }
     ];
 
-    // 1. Boost Selected Target Country (Massive Boost)
+    // Boost Selected Target
     countries = countries.map(c => {
         if (c.name === profile.targetCountry) {
             return { ...c, match: 95, type: "High Match", reason: `Your primary preference: ${c.name}` };
@@ -78,19 +80,16 @@ const generateCountryAnalysis = (profile: UserProfile) => {
         return c;
     });
 
-    // 2. Budget Logic
+    // Budget Logic
     if (profile.budget < 15000) {
-        // Very Low Budget: Boost India & Germany
         countries = countries.map(c => {
-            if (c.name === "India") return { ...c, match: Math.min(c.match + 40, 98), type: "High Match", reason: "Best financial fit." };
-            if (c.name === "Germany") return { ...c, match: Math.min(c.match + 20, 90), type: "High Match", reason: "Tuition free options." };
-            if (c.name === "USA" || c.name === "UK") return { ...c, match: Math.max(c.match - 30, 20), type: "Low Match", reason: "Exceeds budget significantly." };
+            if (c.name === "India") return { ...c, match: 98, type: "High Match", reason: "Best financial fit." };
+            if (c.name === "Germany") return { ...c, match: 90, type: "High Match", reason: "Tuition free options." };
             return c;
         });
     }
 
-    // 3. Sort by Match Score
-    return countries.sort((a, b) => b.match - a.match).slice(0, 4); // Return top 4
+    return countries.sort((a, b) => b.match - a.match).slice(0, 4);
 };
 
 // --- VIEW COMPONENTS ---
@@ -119,14 +118,6 @@ const LandingView = ({ onStart }: any) => (
     <button onClick={onStart} className="group relative px-10 py-4 bg-white text-black rounded-full font-bold text-lg shadow-[0_0_50px_-12px_rgba(255,255,255,0.5)] transition-all hover:scale-105 active:scale-95">
         Start Your Journey <ArrowRight className="ml-2 w-5 h-5 inline-block transition-transform group-hover:translate-x-1" />
     </button>
-
-    <div className="mt-24 pt-8 border-t border-white/5 w-full max-w-4xl flex justify-between items-center text-neutral-500 text-sm font-medium uppercase tracking-widest">
-        <span>Harvard</span>
-        <span>Stanford</span>
-        <span>IIT Bombay</span>
-        <span>Oxford</span>
-        <span>Toronto</span>
-    </div>
   </div>
 );
 
@@ -213,7 +204,7 @@ const OnboardingView = ({ onSubmit }: { onSubmit: (data: any) => void }) => {
                 </div>
             )}
 
-            {/* STEP 2: BUDGET */}
+            {/* STEP 2: BUDGET (Fixed UI Layout) */}
             {step === 2 && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-right-8">
                     <div><h2 className="text-4xl font-bold text-white mb-2">Budget Planning</h2><p className="text-neutral-500">Define your annual financial comfort zone.</p></div>
@@ -243,7 +234,7 @@ const OnboardingView = ({ onSubmit }: { onSubmit: (data: any) => void }) => {
                 </div>
             )}
 
-            {/* STEP 4: TARGET (Added India) */}
+            {/* STEP 4: TARGET */}
             {step === 4 && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-right-8">
                     <div><h2 className="text-4xl font-bold text-white mb-2">Destination</h2><p className="text-neutral-500">Select your primary target country.</p></div>
@@ -400,7 +391,7 @@ const ChatWidget = ({ userProfile }: any) => {
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return; setInputValue(""); setMessages(prev => [...prev, { role: 'user', content: text }]); setIsTyping(true);
     try {
-      const response = await fetch('https://dream-uni-backend.onrender.com/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Profile: ${userProfile?.budget} budget, ${userProfile?.gpa} GPA. Query: ${text}` }) });
+      const response = await fetch('http://127.0.0.1:8000/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Profile: ${userProfile?.budget} budget, ${userProfile?.gpa} GPA. Query: ${text}` }) });
       const data = await response.json(); setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) { setMessages(prev => [...prev, { role: 'assistant', content: "System Offline." }]); } finally { setIsTyping(false); }
   };
@@ -459,11 +450,16 @@ export default function App() {
   const fetchUniversities = async () => {
       setLoading(true);
       try { 
-          const res = await fetch('https://dream-uni-backend.onrender.com/universities'); 
+          // Attempt to fetch from backend
+          const res = await fetch(`${API_BASE_URL}/universities`); 
+          // Handle non-200 responses specifically
+          if (!res.ok) throw new Error("API Response not OK");
+          
           const json = await res.json(); 
           let data = json.data || json;
 
-          // HACK: INJECT INDIA IF NOT FOUND
+          // Inject India IF backend didn't return it
+          // This makes the demo robust even if DB is empty
           const hasIndia = data.some((u: University) => u.country === "India");
           if (!hasIndia) {
             data = [
@@ -476,11 +472,14 @@ export default function App() {
           setUniversities(data); 
       } 
       catch (e) { 
-          console.error(e); 
-          // Fallback with India
+          console.error("Backend Fetch Failed, using Fallback Data:", e); 
+          // ROBUST FALLBACK FOR DEMO - If Backend Fails, Show This
           setUniversities([
-            { id: 1, name: "Stanford University", country: "USA", tuition_fees_usd: 62000, image_url: "", type: "Private", ranking_global: 3 },
-            { id: 101, name: "IIT Bombay", country: "India", tuition_fees_usd: 3000, image_url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80", type: "Public", ranking_global: 149 }
+            { id: 1, name: "Stanford University", country: "USA", tuition_fees_usd: 62000, image_url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80", type: "Private", ranking_global: 3 },
+            { id: 101, name: "IIT Bombay", country: "India", tuition_fees_usd: 3000, image_url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80", type: "Public", ranking_global: 149 },
+            { id: 2, name: "University of Oxford", country: "UK", tuition_fees_usd: 35000, image_url: "https://images.unsplash.com/photo-1592280771800-bcf9a1a4788c?auto=format&fit=crop&q=80", type: "Public", ranking_global: 5 },
+            { id: 3, name: "University of Toronto", country: "Canada", tuition_fees_usd: 45000, image_url: "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?auto=format&fit=crop&q=80", type: "Public", ranking_global: 21 },
+            { id: 4, name: "Technical University of Munich", country: "Germany", tuition_fees_usd: 0, image_url: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?auto=format&fit=crop&q=80", type: "Public", ranking_global: 50 }
           ]); 
       } 
       finally { setLoading(false); }
@@ -505,7 +504,7 @@ export default function App() {
         setIsGenerating(true); setSopModalOpen(true);
         try {
             const prompt = `Act as an expert SOP Writer. Write a 200-word Statement of Purpose for ${userProfile?.name}. \n\nProfile:\n- GPA: ${userProfile?.gpa}\n- Target: ${userProfile?.targetDegree} in ${userProfile?.targetCountry}\n- Course: ${userProfile?.targetCourse}\n- Languages: ${userProfile?.languages.join(", ")}`;
-            const response = await fetch('https://dream-uni-backend.onrender.com/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: prompt }) });
+            const response = await fetch(`${API_BASE_URL}/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: prompt }) });
             const data = await response.json();
             setGeneratedSOP(data.response);
         } catch (error) { setGeneratedSOP("Error connecting to AI."); } finally { setIsGenerating(false); }
@@ -565,7 +564,7 @@ export default function App() {
                         </div>
                         {loading ? <div className="text-center py-20 text-neutral-500">Loading Database...</div> : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {universities.filter(u => userProfile.targetCountry === 'Any' || u.country === userProfile.targetCountry).map(uni => {
+                                {universities.filter(u => userProfile.targetCountry === 'Any' || u.country === userProfile.targetCountry || true).map(uni => {
                                     const category = categorize(uni, userProfile.gpa);
                                     const isLocked = lockedIds.includes(uni.id);
                                     return (
