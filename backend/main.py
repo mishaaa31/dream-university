@@ -14,13 +14,13 @@ load_dotenv()
 
 app = FastAPI(
     title="Dream University API",
-    version="2.0.0"
+    version="2.0.1"
 )
 
 # --- CORS MIDDLEWARE ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "https://dream-university.vercel.app"], # Added Vercel URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,39 +50,10 @@ else:
 # 🔍 SELF-REPAIRING MODEL SELECTION
 active_model = None
 try:
-    print("🤖 Checking available AI models...")
-    available_models = []
-    try:
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                available_models.append(m.name)
-    except Exception as list_err:
-        print(f"⚠️ Could not list models: {list_err}")
-
-    # Priority list
-    priority_list = [
-        "models/gemini-1.5-flash", 
-        "models/gemini-1.5-pro",
-        "models/gemini-pro"
-    ]
-    
-    selected_model_name = None
-    for priority in priority_list:
-        if priority in available_models:
-            selected_model_name = priority
-            break
-            
-    if not selected_model_name and available_models:
-        selected_model_name = available_models[0]
-    
-    if not selected_model_name:
-        selected_model_name = "models/gemini-pro"
-            
-    print(f"🚀 Selected Model: {selected_model_name}")
-    active_model = genai.GenerativeModel(selected_model_name)
-
+    # Try getting the model directly to save startup time
+    active_model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
-    print(f"⚠️ Model Auto-Detect Failed: {e}")
+    print(f"⚠️ Model Fallback: {e}")
     active_model = genai.GenerativeModel('gemini-pro')
 
 # -----------------------------------------------------------------------------
@@ -104,6 +75,7 @@ def format_universities_for_prompt(universities_data):
     for uni in universities_data:
         name = uni.get("name", "Unknown University")
         country = uni.get("country", "Unknown Country")
+        # ✅ FIXED: Correct Column Name
         fees = uni.get("tuition_fees_usd", "N/A") 
         tags = uni.get("tags", [])
         
@@ -131,34 +103,28 @@ async def get_universities():
 @app.post("/chat")
 async def chat_counsellor(request: ChatRequest):
     try:
-        # 1. Fetch Data
+        # 1. Fetch Data (✅ FIXED Column Name)
         uni_response = supabase.table("universities").select("name, country, tuition_fees_usd, tags").execute()
         context_text = format_universities_for_prompt(uni_response.data)
         
-        # 2. Build SYSTEM PROMPT (Integrating the specific personas you requested)
+        # 2. Build SYSTEM PROMPT (Smart Persona)
         system_instruction = (
             "You are 'Dream University AI', an expert international education counsellor. "
             "Adopt the following personas based on the user query:\n\n"
             
             "🧠 PROFILE ANALYZER:\n"
-            "- Analyze student profile (GPA, Budget, Exams) to identify strengths and weaknesses.\n"
-            "- Be honest and practical. Highlight missing requirements (like IELTS/GRE).\n\n"
-            
-            "🧠 DECISION MAKER:\n"
-            "- Recommend best countries based on career goals and budget.\n"
-            "- Highlight risks (visa issues, low budget) and give confidence levels.\n\n"
+            "- Analyze student profile (GPA, Budget, Exams) to identify strengths and weaknesses.\n\n"
             
             "🏫 UNIVERSITY SHORTLISTER:\n"
             "- Suggest universities from the list below that realistically match the profile.\n"
-            "- Categorize them as SAFE, MODERATE, or AMBITIOUS.\n"
-            "- STRICT RULE: Only recommend universities from the provided database list.\n\n"
+            "- STRICT RULE: For recommendations, ONLY use the provided database list.\n\n"
             
-            "✍️ SOP WRITER:\n"
-            "- Help write compelling Statements of Purpose.\n"
-            "- Ensure the SOP aligns with the selected university and career goals.\n"
-            "- Ask clarifying questions if details are missing before writing.\n\n"
+            "✍️ SOP WRITER (Special Mode):\n"
+            "- If asked to write/draft an SOP, Essay, or Email, IGNORE the database restriction.\n"
+            "- Focus purely on writing a high-quality, professional, and personalized document based on the user's name, GPA, and target course.\n"
+            "- Do not add placeholder text like '[Your Name]', use the data provided in the prompt.\n\n"
             
-            f"--- UNIVERSITY DATABASE (For Recommendations Only) ---\n{context_text}\n---------------------------"
+            f"--- UNIVERSITY DATABASE ---\n{context_text}\n---------------------------"
         )
         
         full_prompt = f"{system_instruction}\n\nUser Query: {request.message}"
@@ -172,4 +138,5 @@ async def chat_counsellor(request: ChatRequest):
 
     except Exception as e:
         print(f"❌ AI Chat Error: {str(e)}")
+        # Return error as string so frontend can show it (optional)
         raise HTTPException(status_code=500, detail=f"AI Error: {str(e)}")
