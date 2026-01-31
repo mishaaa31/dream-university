@@ -400,7 +400,7 @@ const ChatWidget = ({ userProfile }: any) => {
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return; setInputValue(""); setMessages(prev => [...prev, { role: 'user', content: text }]); setIsTyping(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Profile: ${userProfile?.budget} budget, ${userProfile?.gpa} GPA. Query: ${text}` }) });
+      const response = await fetch('https://dream-uni-backend.onrender.com/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Profile: ${userProfile?.budget} budget, ${userProfile?.gpa} GPA. Query: ${text}` }) });
       const data = await response.json(); setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) { setMessages(prev => [...prev, { role: 'assistant', content: "System Offline." }]); } finally { setIsTyping(false); }
   };
@@ -459,7 +459,7 @@ export default function App() {
   const fetchUniversities = async () => {
       setLoading(true);
       try { 
-          const res = await fetch('http://127.0.0.1:8000/universities'); 
+          const res = await fetch('https://dream-uni-backend.onrender.com/universities'); 
           const json = await res.json(); 
           let data = json.data || json;
 
@@ -505,7 +505,7 @@ export default function App() {
         setIsGenerating(true); setSopModalOpen(true);
         try {
             const prompt = `Act as an expert SOP Writer. Write a 200-word Statement of Purpose for ${userProfile?.name}. \n\nProfile:\n- GPA: ${userProfile?.gpa}\n- Target: ${userProfile?.targetDegree} in ${userProfile?.targetCountry}\n- Course: ${userProfile?.targetCourse}\n- Languages: ${userProfile?.languages.join(", ")}`;
-            const response = await fetch('http://127.0.0.1:8000/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: prompt }) });
+            const response = await fetch('https://dream-uni-backend.onrender.com/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: prompt }) });
             const data = await response.json();
             setGeneratedSOP(data.response);
         } catch (error) { setGeneratedSOP("Error connecting to AI."); } finally { setIsGenerating(false); }
