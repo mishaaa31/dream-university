@@ -1,0 +1,107 @@
+00:01 Hey, everyone. Welcome back. We are back again with an really exciting hackathon. So humanity founder has been organizing plenty of hackathon.
+00:09 We did, uh, couple in the last month to, uh, and, uh, our final is pretty much unique. We are hiring right skill set based on this era over resumed and traditional interview round.
+00:19 So I'm just taking you through the process real quick and then we'll jump on the task. I will tell you what, what ultimately person will get.
+00:25 The winner will get a full time job opportunity. What about others? How this process will function? if you are having any query, how you can communicate with our team everything.
+00:33 So, before starting, we would love to show you the most recent hackathon is Faith Connect. And we have received plenty of submission in this hackathon.
+00:40 People have definitely crushed this hackathon. This was especially for mobile engineers. While we haven't announced the result of this hackathon, which I'm going to do after this video.
+00:49 But, unofficially, I can tell you, Sojan Bhatta is the winner of this hackathon. He got the offer letter. He assigned everything.
+00:55 And he will be starting this project from 26. definitely his submission was great. One of the most recent hackathon that is in this is Qura link and again there were plenty of submissions.
+01:05 This is actually the telegram group where people are communicating if they are having any doubt or something like that and this is the place where we are accepting their submission and just to just to mention once again on the submission you are just supposed to submit loom video and deployment link 
+01:20 that's it. You guys are not supposed to submit the codes even till the end of the process even at the hiring stage.
+01:26 No one is going to ask you to submit the codes. This is the topic for results where we are announcing the results.
+01:31 This was the winner. Same way, humanity founder has organized plenty of hackathons in the past. This is one VR 180.
+01:36 This was one of the complex hackathon. I can say the complexity of this hackathon was hardest, but it's still people have crushed it.
+01:42 And the person who has been hired is working on this project. So I'm jumping back to the most exciting hackathon which we're going to launch now.
+01:49 This is going to be AI counselor talking about the complexity of this hackathon. I can say it's somewhat medium level complexity.
+01:55 Easy to medium. So, it's not that complicated task, you can easily crush it. Sounds good. I'm jumping on the hackathon description.
+02:02 I will try to help you answer most of your queries. Whatever one person is having, ideally, when we are sharing some tasks.
+02:08 So, listen this carefully. If you're having any doubt, make sure to watch this video once again. So, you are supposed to create a prototype of AI counselor.
+02:17 AI counselor is going to be a web-based platform, you can consider responsiveness, where it can guide students that are planning to study from some university aboard, maybe in the States, United States, or maybe New York, or maybe in any country.
+02:30 So this is the overall project description, please give it a read, you'll get to know a better understanding of the project.
+02:35 What you are supposed to do, you are supposed to create a full functional prototype for AI counselor, how come this prototype will be working, there will be a lending page from where user can sign up or lock in, then there will be an onboarding flow.
+02:46 In the onboarding flow, you guys can ask various questions. Ideally, it can be associated with my academics, what's my visa status, what grades I was having in the exams.
+02:57 If any specific exams that I have given SAP and other exams are there when we are planning to study from other country or any other top universities, this is going to be in the onboarding flow.
+03:08 While one thing that is a catch in this onboarding flow is there can be two ways you can keep this onboarding as.
+03:13 First is going to be manual questions where each and every second page at the next page, questions will change. Or second week, you can keep some sort of conversational AI that is going to be voice-based assistant.
+03:23 And that will be asking questions in natural human language. And we will be responding to those questions in our natural language.
+03:29 And then it will just see if that data in the backend it can be in JSON format or any other respective format and will fill the respective fields into the database.
+03:37 So I'm trying to explain you the complete assignment in this flow itself. Then once the onboarding will be completed, there will be dashboard.
+03:44 The dashboard will be showing those four parameters. You can decide, it can be a CAD mix score, acceptance, chance and everything.
+03:51 What's the budget? One is having to pursue, pursue from any university or stuff like that. Then fourth thing, it's going to be AI counsellor.
+03:59 This is again very interesting one. This will be personalized on user profile, and it can answer questions, it can help users, shortlist their respective university.
+04:08 Also, in dashboard, we are ideally keeping four stages. First stage is to build a profile. Second stage is to discover university based on your offer friends.
+04:16 Third stage is going to be shortlist university. And fourth stage is going to be application courses. So I'm just trying to give you our understanding of this task in a very deeper level than I will tell you what you are supposed to do in that.
+04:27 Sounds good. As I have mentioned, there will be four stages. Second stage was university discovery and shortlisting. First stage was to complete the profile.
+04:34 Let's say if someone has skipped the onboarding, then we need to make sure that onboarding is pretty much proper, right?
+04:39 So that's where you need to consider this thing. Then University locking application guidance with actionable tools. So this is the overall flow of the task.
+04:47 What you are supposed to do in this, you are supposed to create a basic prototype for this, but there are various instruction that I would like to share before you start executing this project.
+04:55 First thing, don't try to do everything. There might be certain aspect. You will say, hey sir, I'm not able to do application guidance because it's like too heavy right now.
+05:03 It's all fine. Whatever the things you are doing, do them in a neat and clean manner. It should be precise.
+05:09 It should not be like, hey, you are supposed to do everything in the assignment. I do understand this is assignment.
+05:13 This is not a project and you can do up to certain aspects. But whatever the things you are doing, try to keep them as much as neat and clean.
+05:20 It should not be like template. You are giving some random data somewhere. Sometimes people are cloning and website from GitHub or somewhere.
+05:27 And they have even kept it as a template. Even text is not changed. Because remember, we guys will be interacting with your deployment.
+05:33 We have no associated relations with your code and no one has that much time to even do that. So make sure you are keeping your flow very much smooth.
+05:42 The critical part of this assignment is going to be university discovery and short listing. And second can be AI counselor but you can express less upon AI counselor.
+05:50 If you are doing that, then that's great. University discovery and short listing why I'm saying so. You need to do the research on the APIs that are giving you the respective data of university.
+05:58 How one can discover university? Let's say if you want to pursue some masters or something from some specific College or ideally in an outer country in other countries people are calling it is cool to to universities So refer those terms also.
+06:12 Yeah, then what will be the set of filters that you would like to see while discovering a university So this is really crucial.
+06:18 Sometimes I would like to discover university based on scholarship Sometimes I would like to discover university based on my profile because my profile has this much grade I have this past accomplishment and then it will suggest me best university, so you need to craft this entire algorithm or maybe 
+06:31 basic version of this which you can upgrade over time. This is going to be the core one and then you can consider rest of the things in the assignment, go with the flow.
+06:40 Same thing, whatever I have explained in this core flow, everything has been explained in detail over this document that is structured onboarding, build AI counselor core requirement like we can also.
+06:49 Now some of you must be asking sir AI counselor can be too complex if we are doing it for multiple edge case, just do for one edge case, just one edge case.
+06:56 Don't try to overdo things, as I said, try to do things even limited, but in a neat and precise manner.
+07:02 If you are doing the short listing of universities through this AI console, it should function smoothly, that's it. In future, it can build a profile, it can help in the application process, it can do a lot of things.
+07:11 But right now, just one thing as a basic thing, sounds good. University discovery, University locking, and application guidance to do, keep it simple, working and paying, that's it.
+07:21 I've explained the flow over this. If you want, you can just click on this one and you can just see everything in detail authentication, user onboarding.
+07:29 So for user onboarding, we have to have a steady goal, budget, exams, dashboard. Sometimes people are not having clarity. So that's where we have tried to explain it in a much clear way, education, target intake, countries, budget, this is gonna be four parameters that can be shown on dashboard.
+07:43 Then these are the stages. Each stage will suggest some recommendation. AI counselor, as I have already mentioned, university shortlisting flow, it can be based on the various factors which you need to see the application guidance.
+07:54 I think you can definitely skip this part. Just skip this profile management. It's fine, you can just keep that on site.
+08:00 It's all good. But whatever the things you are doing, do them in a neat and clean manner. Jumping on the tech stack, I think I've told you the complete assignment in a pretty nicer way, but it's still some of you must be saying, sir, I wanted to do something more in this task or maybe something less.
+08:14 You have the complete freedom, because there is going to be thousands of applicants that will be watching this video and will be making this happen.
+08:20 So you need to see how you're going to compete within that environment. A few things, make sure to set up cursor AI and use that throughout the assignment.
+08:28 Why so? Because cursor AI is a tool that will make coding smoother for you, ensuring that you are not wasting time writing everything from scratch.
+08:37 If you can see something open source, well, it's up to you. And I'm letting you decide making use of cursor, doing the basic coding, giving it instruction and then fixing the things where it's failing.
+08:46 That's it. This way you can make it happen. Sounds good. Talking about tech is tech. Tech is tech can be flexible.
+08:52 Ideally, I'm just being more standard here. You can make use of modern stack, react, next, fast API, not just anything.
+08:58 Any data is fine as of now. PostgreSQL, anything. In the API, we have mentioned you need to do the respective research on university API or any free API in order to make it work.
+09:07 And for AI counselor or other stuff, there is no paid API. You can make use of free, maybe jam and I or something else that you think is free in the market make use of that, or maybe open source model or free stuff.
+09:17 This way you can make it happen. Sounds good. Just other points that I would like to mention, keep the flow neat and clean.
+09:24 Don't try to keep template stuff. Code quality, you can follow the best practices, making sure that it's not failing or giving the bugs or stuff like that.
+09:31 Deployment, you are supposed to submit the deployment link as we have mentioned here. And then there will be usage of AI tools, which I've already mentioned.
+09:40 Code submission, you are not required to submit your codes. winner will continue development as part of founding team. So we do have a well-created repo for this and project for this.
+09:48 So maybe you will be getting access on that and you will be working across that. Discipline, we are very strict about discipline and behavior in the entire hackathon.
+09:57 So make sure that you are watching this video again. Because I am trying to answer 99% of the questions within this video and that's where I have creating this video personally.
+10:06 So you guys can avoid asking unnecessary questions. If someone is also just to mention, if someone is not following the discipline, then there is there are highly highly likely that we'll give our permanent band to that applicant.
+10:16 Like we'll blacklist that applicant from humanity founders hackathon and future highlights. So make sure you are maintaining the decorum, that is our very basic requirement of the hackathon.
+10:24 You can even see in the past hackathons which we did people are very nice, very good. If there is any question coming down the line, then team is answering that question.
+10:34 Don't try to spam. Just wait. Team will answer at its convenience. Most recent was And I think this is this one is this one is we are yeah, this one is faith connect and Here people have been asking question and we have been communicating everything here sounds good.
+10:50 So I believe I've tried giving you a better understanding. This group link is old. So I will update the link submission instruction.
+10:56 I will I've already mentioned demo video explain the product explain the features which you have added on to this submission and then you can maybe take us through those features over the platform itself, no code, nothing and then submit the deployment link.
+11:08 We will be testing your assignment before announcing the winner and that is going to be really crucial step. If let's say if we have kept in submission deadline and then you feel like that you have submitted early or you are having the time, make sure to test your product.
+11:19 Because sometimes team is testing and your product is not functional, even sometimes login fails. So imagine you have given a lot of efforts into that assignment and team is not even able to just log in or restrict that the basic thing.
+11:29 So that's all raised, right? Sounds good, prizes and opportunities. The person will be the winner of this hackathon will be getting a full time job offered within humanity founders and there will be a lot of projects in future that will be working upon.
+11:43 But this is the basic way we are hiring candidate over traditional high rings finding the best person based on the skillset or maybe not the best.
+11:51 I think it can be the one who is willing to make use of AI in order to crush this thing.
+11:55 Some of you might be saying hey this is too tough. I can't do that. That's fine. But some of you might be like okay let's take a single step don't try to think a lot and try to take the first step then you will see okay now you'll see okay things are becoming easier easier and that's how you'll make 
+12:08 it happen amazing certificate the person who will stick till the end of the hackathon will be getting a certificate as an appreciation will stick till the end of the hackathon ideally we are keeping various rounds in the hackathon but just so you know in this hackathon there will be ideally mostly I'm
+12:24 considering there will be no additional round in one percent case there can be but 99% we are expecting it to close by the end of the next week.
+12:32 So by what time you guys can make submission, you guys can make submission by Saturday noon time, that is 12 pm.
+12:39 There will be a group that will be connected with the message group playing, join that group and make submission by Saturday noon time.
+12:47 This is the closing note. Make sure to give it a read. Our personally written this. The second one is more than a challenge.
+12:52 It's a chance to shape your future while working on one of the most advanced project out there because I'm expecting while we are trying to leverage our skills, then no one is telling us about this type of project.
+13:02 In one percent keys, if you are not getting selected in this hackathon, then what you have created a full-stack project that you can add over your resume and definitely it's going to increase your value in next time and whenever you will be sitting over interview, now you have a very nice project over
+13:15 your resume. So this is another mindset. It's just a test for your dedication and obsession towards your role, not just how much you But how much you are willing to figure out because there will be lot of things that I've just given you a brief But there will be plenty of questions that you will be having
+13:30 and I'm not the one that is gonna answer them because this video is gonna remain Same for everyone So you need to figure out those things and you need to impress me with the prototype which you are going to submit It's a test of skills over resumes in the era of AI as we have already mentioned Give it
+13:43 a read throughout the message till the end and this one I would like to highlight those will stay till end and give their best short but ultimately don't end up winning.
+13:52 We'll give them a certificate of appreciation. Sometimes we do even give some vouchers too, but maybe or maybe not. No such commitment.
+13:59 Well, last thing to mention, the person that will make it till end will be definitely be the winner of this hackathon and will be getting a full time job offer.
+14:08 Sometimes we are even hiring second position or third position, but that is completely dependent upon us and maybe to others, we can give some other opportunities in future.
+14:16 So try to give it your best shot as best as you can. I believe I've tried to answer everything in this video whatever was possible.
+14:25 And now I'm looking forward for your guys' submission to see how come you will be crushing this assignment while I believe that I've tried explaining this prototype in a much simpler way.
+14:37 Feel free to make use of GPT cursor, cloud, anything, any specific AI tool. Sometimes people are making use of v0.dev to create the front end and that is really doing great.
+14:47 So feel free to use any such tool. There will be no such restriction But in today's era where AI is like opened has a lot of door while everyone is saying the person who won't use AI Then the life will become hard for that person.
+15:00 So same thing just try to make best use of AI and looking forward to all of your submission By the Saturday noon time you are having enough time.
+15:08 I think that's more than enough that's where we are not keeping second round Within the weekends itself, we will be evaluating each and every submission and by the start of next to next week We will be announcing the winner that's it sounds good.
+15:20 Hope you have enjoyed the entire process and entire video Very much excited to see how come you guys gonna make the submission looking forward for your submission.
+15:28 Thank you guys. Cheers. Have a nice day
