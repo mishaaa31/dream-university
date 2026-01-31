@@ -20,7 +20,8 @@ app = FastAPI(
 # --- CORS MIDDLEWARE ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://dream-university.vercel.app"], # Added Vercel URL
+    # Allow Frontend URLs (Localhost + Production)
+    allow_origins=["http://localhost:3000", "https://dream-university.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -75,7 +76,7 @@ def format_universities_for_prompt(universities_data):
     for uni in universities_data:
         name = uni.get("name", "Unknown University")
         country = uni.get("country", "Unknown Country")
-        # ✅ FIXED: Correct Column Name
+        # ✅ FIXED: Correct Column Name from Database
         fees = uni.get("tuition_fees_usd", "N/A") 
         tags = uni.get("tags", [])
         
@@ -103,7 +104,7 @@ async def get_universities():
 @app.post("/chat")
 async def chat_counsellor(request: ChatRequest):
     try:
-        # 1. Fetch Data (✅ FIXED Column Name)
+        # 1. Fetch Data (✅ FIXED Column Name here too)
         uni_response = supabase.table("universities").select("name, country, tuition_fees_usd, tags").execute()
         context_text = format_universities_for_prompt(uni_response.data)
         
