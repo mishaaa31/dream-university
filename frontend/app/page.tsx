@@ -72,7 +72,6 @@ const generateCountryAnalysis = (profile: UserProfile) => {
         { name: "Ireland", match: 60, reason: "Growing tech hub in Europe.", type: "Medium Match" }
     ];
 
-    // Boost Selected Target
     countries = countries.map(c => {
         if (c.name === profile.targetCountry) {
             return { ...c, match: 95, type: "High Match", reason: `Your primary preference: ${c.name}` };
@@ -80,7 +79,6 @@ const generateCountryAnalysis = (profile: UserProfile) => {
         return c;
     });
 
-    // Budget Logic
     if (profile.budget < 15000) {
         countries = countries.map(c => {
             if (c.name === "India") return { ...c, match: 98, type: "High Match", reason: "Best financial fit." };
@@ -118,6 +116,14 @@ const LandingView = ({ onStart }: any) => (
     <button onClick={onStart} className="group relative px-10 py-4 bg-white text-black rounded-full font-bold text-lg shadow-[0_0_50px_-12px_rgba(255,255,255,0.5)] transition-all hover:scale-105 active:scale-95">
         Start Your Journey <ArrowRight className="ml-2 w-5 h-5 inline-block transition-transform group-hover:translate-x-1" />
     </button>
+
+    <div className="mt-24 pt-8 border-t border-white/5 w-full max-w-4xl flex justify-between items-center text-neutral-500 text-sm font-medium uppercase tracking-widest">
+        <span>Harvard</span>
+        <span>Stanford</span>
+        <span>IIT Bombay</span>
+        <span>Oxford</span>
+        <span>Toronto</span>
+    </div>
   </div>
 );
 
@@ -204,11 +210,10 @@ const OnboardingView = ({ onSubmit }: { onSubmit: (data: any) => void }) => {
                 </div>
             )}
 
-            {/* STEP 2: BUDGET (Fixed UI Layout) */}
+            {/* STEP 2: BUDGET */}
             {step === 2 && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-right-8">
                     <div><h2 className="text-4xl font-bold text-white mb-2">Budget Planning</h2><p className="text-neutral-500">Define your annual financial comfort zone.</p></div>
-                    
                     <div className="flex flex-col gap-4">
                         <label className="text-xs font-bold text-neutral-500 uppercase">Annual Budget Limit</label>
                         <div className="flex items-center bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden p-3">
@@ -271,7 +276,7 @@ const AnalysisView = ({ profile, onContinue }: { profile: UserProfile, onContinu
     );
 };
 
-// 5. APPLICATION VIEW (Clean Kanban)
+// 5. APPLICATION VIEW
 const KanbanBoard = ({ tasks, onToggleTask, onGenerateSOP, onCompleteSOP }: any) => {
     const columns = [
         { id: 'TODO', title: 'To Do' },
@@ -295,18 +300,14 @@ const KanbanBoard = ({ tasks, onToggleTask, onGenerateSOP, onCompleteSOP }: any)
                                             {task.status !== 'DONE' && <button onClick={() => onToggleTask(task.id, task.status === 'TODO' ? 'IN_PROGRESS' : 'DONE')} className="p-1 hover:bg-neutral-800 rounded text-neutral-400"><ChevronRight className="w-3 h-3"/></button>}
                                         </div>
                                     </div>
-                                    
                                     <div className="flex items-start gap-3">
                                         {task.status === 'DONE' ? (
-                                            <div className="mt-0.5 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0 shadow-lg shadow-green-500/20">
-                                                <Check className="w-3.5 h-3.5 text-white stroke-[3]" />
-                                            </div>
+                                            <div className="mt-0.5 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0 shadow-lg shadow-green-500/20"><Check className="w-3.5 h-3.5 text-white stroke-[3]" /></div>
                                         ) : (
                                             <div className="mt-0.5 w-5 h-5 rounded-full border-2 border-neutral-700 shrink-0" />
                                         )}
                                         <h4 className={`font-medium text-sm text-neutral-200 mb-2 ${task.status === 'DONE' ? 'line-through text-neutral-500' : ''}`}>{task.label}</h4>
                                     </div>
-                                    
                                     <div className="pl-8 mt-2 space-y-2">
                                         {task.aiAction === 'SOP' && task.status !== 'DONE' && (
                                             <button onClick={onGenerateSOP} className="w-full py-2 bg-violet-900/20 hover:bg-violet-900/30 text-violet-400 text-xs font-bold rounded-lg border border-violet-500/20 flex items-center justify-center gap-2 transition-colors"><Sparkles className="w-3 h-3" /> Draft with AI</button>
@@ -391,7 +392,7 @@ const ChatWidget = ({ userProfile }: any) => {
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return; setInputValue(""); setMessages(prev => [...prev, { role: 'user', content: text }]); setIsTyping(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Profile: ${userProfile?.budget} budget, ${userProfile?.gpa} GPA. Query: ${text}` }) });
+      const response = await fetch(`${API_BASE_URL}/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Profile: ${userProfile?.budget} budget, ${userProfile?.gpa} GPA. Query: ${text}` }) });
       const data = await response.json(); setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) { setMessages(prev => [...prev, { role: 'assistant', content: "System Offline." }]); } finally { setIsTyping(false); }
   };
@@ -450,16 +451,11 @@ export default function App() {
   const fetchUniversities = async () => {
       setLoading(true);
       try { 
-          // Attempt to fetch from backend
           const res = await fetch(`${API_BASE_URL}/universities`); 
-          // Handle non-200 responses specifically
           if (!res.ok) throw new Error("API Response not OK");
-          
           const json = await res.json(); 
           let data = json.data || json;
 
-          // Inject India IF backend didn't return it
-          // This makes the demo robust even if DB is empty
           const hasIndia = data.some((u: University) => u.country === "India");
           if (!hasIndia) {
             data = [
@@ -473,13 +469,10 @@ export default function App() {
       } 
       catch (e) { 
           console.error("Backend Fetch Failed, using Fallback Data:", e); 
-          // ROBUST FALLBACK FOR DEMO - If Backend Fails, Show This
           setUniversities([
             { id: 1, name: "Stanford University", country: "USA", tuition_fees_usd: 62000, image_url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80", type: "Private", ranking_global: 3 },
             { id: 101, name: "IIT Bombay", country: "India", tuition_fees_usd: 3000, image_url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80", type: "Public", ranking_global: 149 },
-            { id: 2, name: "University of Oxford", country: "UK", tuition_fees_usd: 35000, image_url: "https://images.unsplash.com/photo-1592280771800-bcf9a1a4788c?auto=format&fit=crop&q=80", type: "Public", ranking_global: 5 },
-            { id: 3, name: "University of Toronto", country: "Canada", tuition_fees_usd: 45000, image_url: "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?auto=format&fit=crop&q=80", type: "Public", ranking_global: 21 },
-            { id: 4, name: "Technical University of Munich", country: "Germany", tuition_fees_usd: 0, image_url: "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?auto=format&fit=crop&q=80", type: "Public", ranking_global: 50 }
+            { id: 2, name: "University of Oxford", country: "UK", tuition_fees_usd: 35000, image_url: "https://images.unsplash.com/photo-1592280771800-bcf9a1a4788c?auto=format&fit=crop&q=80", type: "Public", ranking_global: 5 }
           ]); 
       } 
       finally { setLoading(false); }
@@ -488,10 +481,8 @@ export default function App() {
   const handleLogin = (name: string, email: string) => { setUserProfile({ name, email, city: '', currency: 'USD', budget: 0, gpa: 0, targetDegree: '', targetCourse: '', targetCountry: '', languages: [], tests: [] }); setView('ONBOARDING'); };
   const handleOnboarding = (data: any) => { if (userProfile) { setUserProfile({ ...userProfile, ...data }); fetchUniversities(); setView('ANALYSIS'); } };
   
-  // SMART LOCK LOGIC: Lock -> Auto Complete Task 2
   const handleLock = (id: number) => {
       setLockedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-      // If locking for the first time, mark task 2 done
       if (!lockedIds.includes(id)) {
           setTasks(prev => prev.map(t => t.id === '2' ? { ...t, status: 'DONE' } : t));
       }
@@ -501,13 +492,36 @@ export default function App() {
 
   // AI ACTIONS
   const generateSOP = async () => {
-        setIsGenerating(true); setSopModalOpen(true);
+        setIsGenerating(true); setSopModalOpen(true); setGeneratedSOP(""); // Clear previous
         try {
             const prompt = `Act as an expert SOP Writer. Write a 200-word Statement of Purpose for ${userProfile?.name}. \n\nProfile:\n- GPA: ${userProfile?.gpa}\n- Target: ${userProfile?.targetDegree} in ${userProfile?.targetCountry}\n- Course: ${userProfile?.targetCourse}\n- Languages: ${userProfile?.languages.join(", ")}`;
-            const response = await fetch(`${API_BASE_URL}/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: prompt }) });
+            
+            // Add Timeout to fail fast and show mock if backend is slow
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
+
+            const response = await fetch(`${API_BASE_URL}/chat`, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ message: prompt }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) throw new Error("Backend Error");
             const data = await response.json();
             setGeneratedSOP(data.response);
-        } catch (error) { setGeneratedSOP("Error connecting to AI."); } finally { setIsGenerating(false); }
+        } catch (error) { 
+            console.warn("AI Generation Failed, using Fallback:", error);
+            // FALLBACK SOP FOR DEMO
+            const mockSOP = `STATEMENT OF PURPOSE\n\nTo the Admissions Committee,\n\nI am writing to express my strong interest in the ${userProfile?.targetDegree} program in ${userProfile?.targetCourse} at your esteemed university. With a GPA of ${userProfile?.gpa} and a deep passion for the field, I believe I am an ideal candidate for this program.\n\nMy academic journey has been defined by a curiosity to learn and a drive to excel. Having developed proficiency in ${userProfile?.languages.join(", ") || "multiple languages"}, I appreciate the value of diverse perspectives in problem-solving. My goal is to gain specialized knowledge and practical skills that will allow me to make meaningful contributions to the industry.\n\nI am particularly drawn to your university's reputation for excellence and its commitment to fostering innovation. I am eager to engage with your distinguished faculty and collaborate with fellow students from around the world.\n\nThank you for considering my application.\n\nSincerely,\n${userProfile?.name}`;
+            
+            setTimeout(() => {
+                setGeneratedSOP(mockSOP);
+            }, 1000);
+        } finally { 
+            setIsGenerating(false); 
+        }
   };
 
   const acceptSOP = () => {
@@ -616,7 +630,7 @@ export default function App() {
         <ChatWidget userProfile={userProfile} />
         <UniversityDetailsModal university={selectedUniDetails} isOpen={!!selectedUniDetails} onClose={() => setSelectedUniDetails(null)} />
         
-        {/* SOP Modal */}
+        {/* SOP Modal - Fixed Copy & Download */}
         {sopModalOpen && (
             <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
                 <div className="w-full max-w-2xl rounded-2xl bg-[#0a0a0a] border border-white/10 shadow-2xl p-8 relative overflow-hidden">
